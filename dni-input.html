@@ -1,0 +1,86 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-input/iron-input.html">
+<link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
+
+<link rel="import" href="dni-validator.html">
+
+<dom-module id="dni-input">
+	<template>
+
+		<style>
+			:host {
+				display: inline-block;
+			}
+
+			:host([hidden]) {
+				display: none !important;
+			}
+
+			input[is="iron-input"] {
+				font: inherit;
+				outline: none;
+				box-shadow: none;
+				border: none;
+				width: auto;
+				text-align: center;
+			}
+
+			.container {
+				@apply(--layout-horizontal);
+			}
+
+			input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
+				-webkit-appearance: none;
+				margin: 0;
+			}
+		</style>
+
+		<dni-validator></dni-validator>
+
+		<div class="container">
+
+			<input is="iron-input" type="number" maxlength="8" bind-value="{{_dni}}" size="8" aria-label="dni">
+			-
+			<input is="iron-input" maxlength="1" bind-value="{{_digit}}" size="1" aria-label="verified digit">
+
+		</div>
+
+	</template>
+</dom-module>
+
+<script>
+	Polymer({
+		is: 'dni-input',
+
+		behaviors: [
+			Polymer.IronValidatableBehavior
+		],
+
+		properties: {
+			value: {
+				notify: true,
+				type: String
+			},
+			_dni: {
+				type: String
+			},
+			_digit: {
+				type: String
+			},
+			validator: {
+				type: String,
+				value: 'dni-validator'
+			}
+		},
+
+		observers: [
+			'_computeValue(_dni,_digit)'
+		],
+
+		_computeValue: function(_dni, _digit) {
+			this.value = _dni.trim() + '-' + _digit.trim();
+		}
+
+	});
+</script>

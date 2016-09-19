@@ -1,0 +1,46 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../paper-input/paper-input-container.html">
+<link rel="import" href="../paper-input/paper-input-error.html">
+
+<link rel="import" href="dni-input.html">
+<!--
+`paper-dni-input`
+A dni verifier input
+
+@demo demo/index.html 
+-->
+
+
+<dom-module id="paper-dni-input">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <paper-input-container always-float-label auto-validate attr-for-value="value">
+		  <label>[[label]]</label>
+		  <dni-input class="paper-input-input"></dni-input>
+		  <paper-input-error>[[errorMessage]]</paper-input-error>
+    </paper-input-container>
+  </template>
+
+  <script>
+    Polymer({
+
+      is: 'paper-dni-input',
+
+      properties:{
+        label: {
+          type: String,
+          value: 'DNI'
+        },
+
+        errorMessage:{
+          type: String
+        }
+      }
+
+    });
+  </script>
+</dom-module>
