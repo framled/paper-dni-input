@@ -2,28 +2,28 @@
 
 <html>
   <head>
-    <title>paper-input-dni test</title>
+    <title>paper-dni-input test</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1, user-scalable=yes">
     <script src="../../webcomponentsjs/webcomponents-lite.js"></script>
     <script src="../../web-component-tester/browser.js"></script>
 
-    <link rel="import" href="../paper-input-dni.html">
+    <link rel="import" href="../paper-dni-input.html">
   </head>
   <body>
 
     <test-fixture id="basic">
       <template>
-        <paper-input-dni></paper-input-dni>
+        <paper-dni-input></paper-dni-input>
       </template>
     </test-fixture>
 
     <script>
-      suite('paper-input-dni', function() {
+      suite('paper-dni-input', function() {
 
         test('instantiating the element works', function() {
           var element = fixture('basic');
-          assert.equal(element.is, 'paper-input-dni');
+          assert.equal(element.is, 'paper-dni-input');
         });
 
       });
