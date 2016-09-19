@@ -1,0 +1,23 @@
+<link rel="import" href="../polymer/polymer.html">
+<link rel="import" href="../iron-validator-behavior/iron-validator-behavior.html">
+
+<script>
+	Polymer({
+		is: 'dni-validator',
+
+		behaviors: [
+			Polymer.IronValidatorBehavior
+		],
+
+		validate: function(value) {
+			var dni = value.replace('-','');
+			var regex = /^\d{0,8}-[a-zA-Z]{0,1}$/;
+
+			if(value.match(regex)){
+				var lockup = 'TRWAGMYFPDXBNJZSQVHLCKE';
+				var valueDni = dni.substr(0,dni.length - 1);
+				return !dni || lockup.charAt(valueDni % 23) == dni.substr(dni.length-1,1).toUpperCase();
+			}
+		}
+	});
+</script>
