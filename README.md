@@ -1,6 +1,6 @@
 # \<paper-dni-input\>
 
-A dni verifier input
+A dni paper input field with a dni validator
 
 ## Install the Polymer-CLI
 
@@ -36,3 +36,8 @@ $ polymer test
 ```
 
 Your application is already set up to be tested via [web-component-tester](https://github.com/Polymer/web-component-tester). Run `polymer test` to run your application's test suite locally.
+
+##Examples
+```
+<paper-dni-input label="dni" error-message="invalid dni!" auto-validate></paper-dni-input>
+```

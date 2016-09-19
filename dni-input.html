@@ -2,6 +2,7 @@
 <link rel="import" href="../iron-input/iron-input.html">
 <link rel="import" href="../iron-flex-layout/iron-flex-layout.html">
 <link rel="import" href="../iron-validatable-behavior/iron-validatable-behavior.html">
+<link rel="import" href="../iron-a11y-keys-behavior/iron-a11y-keys-behavior.html">
 
 <link rel="import" href="dni-validator.html">
 
@@ -17,6 +18,12 @@
 				display: none !important;
 			}
 
+			span {
+				@apply(--paper-input-container-font);
+				opacity: 0.33;
+				text-align: center;
+			}
+
 			input[is="iron-input"] {
 				font: inherit;
 				outline: none;
@@ -24,6 +31,16 @@
 				border: none;
 				width: auto;
 				text-align: center;
+			}
+
+			input[is="iron-input"]:nth-child(1){
+				@apply(--layout-flex);
+				@apply(--paper-font-subhead);
+				@apply(--paper-input-container-input);
+			}
+
+			input[is="iron-input"]:nth-child(3){
+				min-width: 2em;
 			}
 
 			.container {
@@ -36,13 +53,46 @@
 			}
 		</style>
 
-		<dni-validator></dni-validator>
+		<dni-validator id="validator"></dni-validator>
+		
+		<span aria-hidden id="dniLabel" hidden>dni</span>
+		<span aria-hidden id="checkerLabel" hidden>Checker</span>
 
 		<div class="container">
 
-			<input is="iron-input" type="number" maxlength="8" bind-value="{{_dni}}" size="8" aria-label="dni">
-			-
-			<input is="iron-input" maxlength="1" bind-value="{{_digit}}" size="1" aria-label="verified digit">
+			<input is="iron-input"
+				type="number" 
+				maxlength="8" 
+				bind-value="{{dni}}" 
+				size="8" 
+				aria-label="dni"
+				aria-labelledby$="[[_computeAriaLabel(ariaLabelPrefix,'dniLabel')]]"
+				required$="[[required]]"
+				placeholder="12345678"
+				prevent-invalid-input
+				disabled$="[[disabled]]"
+				invalid="{{invalid}}"
+				autofocus$="[[autofocus]]"
+				readonly$="[[readonly]]">
+
+			<span>-</span>
+
+			<input is="iron-input"
+				id="checkerInput"
+				maxlength="1" 
+				bind-value="{{checker}}" 
+				size="1" 
+				aria-label="checker"
+				maxlength="1" 
+				aria-label="checker"
+				aria-labelledby$="[[_computeAriaLabel(ariaLabelPrefix,'checkerLabel')]]"
+				required$="[[required]]"
+				placeholder="T"
+				prevent-invalid-input
+				disabled$="[[disabled]]"
+				invalid="{{invalid}}"
+				autofocus$="[[autofocus]]"
+				readonly$="[[readonly]]">
 
 		</div>
 
@@ -54,32 +104,87 @@
 		is: 'dni-input',
 
 		behaviors: [
+			Polymer.IronA11yKeysBehavior,
 			Polymer.IronValidatableBehavior
 		],
 
 		properties: {
+
 			value: {
 				notify: true,
 				type: String
 			},
-			_dni: {
+
+			dni: {
 				type: String
 			},
-			_digit: {
+
+			checker: {
 				type: String
 			},
+
 			validator: {
 				type: String,
 				value: 'dni-validator'
+			},
+
+			required: {
+				type: Boolean,
+				value: false
+			},
+
+			ariaLabelPrefix: {
+				type:String
+			},
+
+			/**
+			 * Set to true to disable the dni and check digit input elements.
+			 */
+			disabled: {
+				type: Boolean,
+				value: false
+			},
+			/**
+			 * Set to true to autofocus the dni input element.
+			 */
+			autofocus: {
+				type: Boolean
+			},
+
+			/**
+			 * Set to true to mark the dni and check digit inputs as not editable.
+			 */
+			readonly: {
+				type: Boolean,
+				value: false
 			}
 		},
 
 		observers: [
-			'_computeValue(_dni,_digit)'
+			'_computeValue(dni , checker)'
 		],
 
-		_computeValue: function(_dni, _digit) {
-			this.value = _dni.trim() + '-' + _digit.trim();
+		_computeValue: function(dni, checker) {
+			this.value = dni.trim() + '-' + checker.trim();
+			this.fire('dniChanged', {dni: dni, checker: checker});
+
+			if(dni.length >= 8){
+				this.$.checkerInput.focus();
+			}
+		},
+
+		_computeAriaLabel: function(dniLabel, checkerLabel) {
+			return dniLabel + ' ' +  checkerLabel;
+		},
+
+		validate: function(){
+			// Empty, non-required input is valid.
+			if (!this.required && this.dni == '' && this.checker == '') {
+				return true;
+			}
+			this.invalid = !this.$.validator.validate(this.value);
+			this.fire('iron-input-validate');
+			return !this.invalid;
 		}
 
 	});

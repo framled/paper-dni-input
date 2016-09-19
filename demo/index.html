@@ -8,6 +8,8 @@
 
     <link rel="import" href="../../iron-demo-helpers/demo-pages-shared-styles.html">
     <link rel="import" href="../../iron-demo-helpers/demo-snippet.html">
+    <link rel="import" href="../../iron-form/iron-form.html">
+    <link rel="import" href="../../paper-button/paper-button.html">
 
     <link rel="import" href="../paper-dni-input.html">
 
@@ -20,7 +22,37 @@
       <h3>Basic paper-dni-input Demo</h3>
       <demo-snippet>
         <template>
-          <paper-dni-input label="DNI"></paper-dni-input>
+          <paper-dni-input 
+            label="dni" 
+            error-message="dni invalid!" 
+            required 
+            auto-validate>
+          </paper-dni-input>
+            
+        </template>
+      </demo-snippet>
+      
+      <h3>Usage with iron-form</h3>
+      <demo-snippet>
+        <template>
+          <form is="iron-form" id="form">
+            <paper-dni-input 
+              name="dni"
+              label="dni" 
+              error-message="dni invalid!" 
+              required 
+              auto-validate>
+            </paper-dni-input>
+
+            <paper-button raised onclick="_submit(event)">
+              submit
+            </paper-button>
+          </form>
+          <script>
+            function _submit(event) {
+              Polymer.dom(event).localTarget.parentElement.submit();
+            }
+          </script>
         </template>
       </demo-snippet>
     </div>
